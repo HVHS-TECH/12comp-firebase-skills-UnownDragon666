@@ -27,7 +27,7 @@
         <div class="container">
             <div class="column">
                 <button onclick="fb_initialise()">t03: initialise firebase</button>
-                <button onclick="">t04: authenticate</button>
+                <button onclick="fb_authenticate()">t04: authenticate</button>
                 <button onclick="">t05: detect login change</button>
                 <button onclick="">t06: logout</button>
             </div>
@@ -53,47 +53,31 @@
         firebase status
     ************************************************************-->
     <footer id="s_fbStatus">
-        <div style="padding:8px;">
-            <p class="p_fbStatus">login: <span id="p_fbLogin"> n/a</span></p>
-            <p class="p_fbStatus">write rec: <span id="p_fbWriteRec"> n/a</span></p>
-            <p class="p_fbStatus">read rec: <span id="p_fbReadRec"> n/a</span></p>
-            <p class="p_fbStatus">read all: <span id="p_fbReadAll"> n/a</span></p>
-            <p class="p_fbStatus">update rec: <span id="p_fbUpdateRec"> n/a</span></p>
-            <p class="p_fbStatus">read sorted:<span id="p_fbReadSorted">n/a</span></p>
+        <div style="padding:8px;" class="container">
+            <div class="column">
+                <p class="p_fbStatus">Initialised: <span id="p_fbInitialise"> n/a</span></p>
+                <p class="p_fbStatus">Authenticated: <span id="p_fbAuthenticate"> n/a</span></p>
+                <p class="p_fbStatus">login: <span id="p_fbLogin"> n/a</span></p>
+                <p class="p_fbStatus">write rec: <span id="p_fbWriteRec"> n/a</span></p>
+            </div>
 
-            <p class="p_fbStatus">listen: <span id="p_fbListen"> n/a</span></p>
-            <p class="p_fbStatus">delete rec: <span id="p_fbDeleteRec"> n/a</span></p>
-            <p class="p_fbStatus">debug: <span id="p_debug"> n/a</span></p>
+            <div class="column">
+                <p class="p_fbStatus">read rec: <span id="p_fbReadRec"> n/a</span></p>
+                <p class="p_fbStatus">read all: <span id="p_fbReadAll"> n/a</span></p>
+                <p class="p_fbStatus">update rec: <span id="p_fbUpdateRec"> n/a</span></p>
+                <p class="p_fbStatus">read sorted:<span id="p_fbReadSorted">n/a</span></p>
+            </div>
+
+            <div class="column">
+                <p class="p_fbStatus">listen: <span id="p_fbListen"> n/a</span></p>
+                <p class="p_fbStatus">delete rec: <span id="p_fbDeleteRec"> n/a</span></p>
+                <p class="p_fbStatus">debug: <span id="p_debug"> n/a</span></p>
+            </div>
         </div>
     </footer>
 
     <!-- Your JS files & main module ***************************-->
     <script type="module" src="./main.mjs"></script>
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const FIREBASECONFIG = {
-            apiKey: "AIzaSyCkKH0pJ-Fo9axQNsBswxIwZyuruG1X6ts",
-            authDomain: "comp-2025-idrees-munshi-24d0e.firebaseapp.com",
-            databaseURL: "https://comp-2025-idrees-munshi-24d0e-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "comp-2025-idrees-munshi-24d0e",
-            storageBucket: "comp-2025-idrees-munshi-24d0e.firebasestorage.app",
-            messagingSenderId: "811934625308",
-            appId: "1:811934625308:web:a1ff1ffffdcab01bcd79d9",
-            measurementId: "G-7P3VZN9ZFD"
-        };
-
-        // Initialize Firebase
-        const FIREBASEAPP = initializeApp(FIREBASECONFIG);
-        FB_APPDB = getDatabase(FIREBASEAPP);
-        const ANALYTICS = getAnalytics(FIREBASEAPP);
-    </script>
 </body>
 
 </html>

@@ -19,6 +19,31 @@ import { initializeApp }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getDatabase }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup }
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+/**************************************************************/
+// This is the configuration for my firebase app
+/**************************************************************/
+const FB_CONFIG = {
+    apiKey: "AIzaSyCkKH0pJ-Fo9axQNsBswxIwZyuruG1X6ts",
+    authDomain: "comp-2025-idrees-munshi-24d0e.firebaseapp.com",
+    databaseURL: "https://comp-2025-idrees-munshi-24d0e-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "comp-2025-idrees-munshi-24d0e",
+    storageBucket: "comp-2025-idrees-munshi-24d0e.firebasestorage.app",
+    messagingSenderId: "811934625308",
+    appId: "1:811934625308:web:a1ff1ffffdcab01bcd79d9",
+    measurementId: "G-7P3VZN9ZFD"
+};
+
+const FB_APP = initializeApp(FB_CONFIG);
+console.log('%c FIREBASEAPP: ' + FB_APP,
+    'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+
+const FB_APPDB = getDatabase(FB_APP);
+console.info('%c FIREBASEAPPDB: ' + FB_APPDB,
+    'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+
 
 /**************************************************************/
 // EXPORT FUNCTIONS
@@ -26,8 +51,7 @@ import { getDatabase }
 /**************************************************************/
 export {
     fb_initialise,
-    getDatabase,
-    initializeApp
+    fb_authenticate
 };
 
 /**************************************************************/
@@ -37,12 +61,35 @@ export {
 // Inut:N/A
 // Output: N/A
 /**************************************************************/
-
-
 function fb_initialise() {
     console.log('%c fb_initialise(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    document.getElementById("p_fbInitialise").innerHTML = "Initialised";
 }
+
+/**************************************************************/
+// fb_authenticate()
+// Authenticate user using google account
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_authenticate() {
+    const FB_AUTH = getAuth();
+    const FB_PROVIDER = new GoogleAuthProvider();
+    // Make google ask user to select account
+    FB_PROVIDER.setCustomParameters({
+        prompt: 'select_account'
+    });
+
+    signInWithPopup(FB_AUTH, FB_PROVIDER).then((result) => {
+        document.getElementById("p_fbAuthenticate").innerHTML = "Authenticated";
+        console.log(result.user.email);
+    }).catch((error) => {
+        console.log('error to authenticate: ' + error);
+    });
+}
+
 
 /**************************************************************/
 // END OF CODE
