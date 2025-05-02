@@ -17,12 +17,9 @@ console.log('%c fb_io.mjs',
 // Import all the methods you want to call from the firebase modules
 import { initializeApp }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getDatabase }
+import { getDatabase, ref, set }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import {
-    getAuth, GoogleAuthProvider, signInWithPopup,
-    onAuthStateChanged, signOut
-}
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 
@@ -55,7 +52,7 @@ console.info('%c FIREBASEAPPDB: ' + FB_APPDB,
 /**************************************************************/
 export {
     fb_initialise, fb_authenticate, fb_displayLoginState,
-    fb_signOut
+    fb_signOut, fb_writeRec
 };
 
 /**************************************************************/
@@ -113,7 +110,7 @@ function fb_displayLoginState() {
     onAuthStateChanged(FB_AUTH, (user) => {
         if (user) {
             console.log('User is signed in: ' + user.email);
-            document.getElementById("p_fbLogin").innerHTML = "Logged in as " + user.email;
+            document.getElementById("p_fbLogin").innerHTML = "Logged in as " + user.displayName;
         } else {
             console.log('User is signed out');
             document.getElementById("p_fbLogin").innerHTML = "Not logged in";
@@ -138,6 +135,27 @@ function fb_signOut() {
     }).catch((error) => {
         console.log('Error signing out: ' + error);
     });
+}
+
+/**************************************************************/
+// fb_writeRec()
+// Write a record to the database
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_writeRec() {
+    console.log('%c fb_writeRec(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const AUTH = getAuth();
+    const FB_APPDB= getDatabase();
+    const REF = ref(FB_APPDB, 'users/' + AUTH.currentUser.uid);
+    set(REF, {uid: AUTH.currentUser.uid, email: AUTH.currentUser.email, name: AUTH.currentUser.displayName}).then(() => {
+        console.log('User record written');
+    }).catch((error) => {
+        console.log('Error writing user record: ' + error);
+    });
+    document.getElementById("fb_writeRec").innerHTML = "Record written";
 }
 
 /**************************************************************/
