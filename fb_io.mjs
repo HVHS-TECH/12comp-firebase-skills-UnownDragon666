@@ -17,34 +17,10 @@ console.log('%c fb_io.mjs',
 // Import all the methods you want to call from the firebase modules
 import { initializeApp }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getDatabase, ref, set }
+import { getDatabase, ref, set, get }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-
-/**************************************************************/
-// This is the configuration for my firebase app
-/**************************************************************/
-const FB_CONFIG = {
-    apiKey: "AIzaSyCkKH0pJ-Fo9axQNsBswxIwZyuruG1X6ts",
-    authDomain: "comp-2025-idrees-munshi-24d0e.firebaseapp.com",
-    databaseURL: "https://comp-2025-idrees-munshi-24d0e-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "comp-2025-idrees-munshi-24d0e",
-    storageBucket: "comp-2025-idrees-munshi-24d0e.firebasestorage.app",
-    messagingSenderId: "811934625308",
-    appId: "1:811934625308:web:a1ff1ffffdcab01bcd79d9",
-    measurementId: "G-7P3VZN9ZFD"
-};
-
-const FB_APP = initializeApp(FB_CONFIG);
-console.log('%c FIREBASEAPP: ' + FB_APP,
-    'color: ' + COL_C + '; background-color: ' + COL_B + ';');
-
-const FB_APPDB = getDatabase(FB_APP);
-console.info('%c FIREBASEAPPDB: ' + FB_APPDB,
-    'color: ' + COL_C + '; background-color: ' + COL_B + ';');
-
 
 /**************************************************************/
 // EXPORT FUNCTIONS
@@ -52,7 +28,7 @@ console.info('%c FIREBASEAPPDB: ' + FB_APPDB,
 /**************************************************************/
 export {
     fb_initialise, fb_authenticate, fb_displayLoginState,
-    fb_signOut, fb_writeRec
+    fb_signOut, fb_writeRec, fb_readRec
 };
 
 /**************************************************************/
@@ -65,6 +41,26 @@ export {
 function fb_initialise() {
     console.log('%c fb_initialise(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    
+    const FB_CONFIG = {
+        apiKey: "AIzaSyCkKH0pJ-Fo9axQNsBswxIwZyuruG1X6ts",
+        authDomain: "comp-2025-idrees-munshi-24d0e.firebaseapp.com",
+        databaseURL: "https://comp-2025-idrees-munshi-24d0e-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "comp-2025-idrees-munshi-24d0e",
+        storageBucket: "comp-2025-idrees-munshi-24d0e.firebasestorage.app",
+        messagingSenderId: "811934625308",
+        appId: "1:811934625308:web:a1ff1ffffdcab01bcd79d9",
+        measurementId: "G-7P3VZN9ZFD"
+    };
+
+    const FB_APP = initializeApp(FB_CONFIG);
+    console.log('%c FIREBASEAPP: ' + FB_APP,
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+
+    const FB_APPDB = getDatabase(FB_APP);
+    console.info('%c FIREBASEAPPDB: ' + FB_APPDB,
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    
     document.getElementById("p_fbInitialise").innerHTML = "Initialised";
 }
 
@@ -76,7 +72,7 @@ function fb_initialise() {
 // Output: N/A
 /**************************************************************/
 function fb_authenticate() {
-    console.log('%c fb_authenticate(): ',   
+    console.log('%c fb_authenticate(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
     const FB_AUTH = getAuth();
     const FB_PROVIDER = new GoogleAuthProvider();
@@ -148,14 +144,52 @@ function fb_writeRec() {
     console.log('%c fb_writeRec(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
     const AUTH = getAuth();
-    const FB_APPDB= getDatabase();
-    const REF = ref(FB_APPDB, 'users/' + AUTH.currentUser.uid);
-    set(REF, {uid: AUTH.currentUser.uid, email: AUTH.currentUser.email, name: AUTH.currentUser.displayName}).then(() => {
-        console.log('User record written');
+    const APPDB = getDatabase();
+    const REF = ref(APPDB, 'users/' + AUTH.currentUser.uid);
+    set(REF,
+        {
+            uid: AUTH.currentUser.uid,
+            email: AUTH.currentUser.email,
+            name: AUTH.currentUser.displayName,
+            photoURL: AUTH.currentUser.photoURL,
+            providerId: AUTH.currentUser.providerId,
+            metadata: AUTH.currentUser.metadata,
+            providerData: AUTH.currentUser.providerData
+        }).then(() => {
+            console.log('User record written');
+            document.getElementById("p_fbWriteRec").innerHTML = "Record written";
+        }).catch((error) => {
+            console.log('Error writing user record: ' + error);
+        });
+    
+}
+
+/**************************************************************/
+// fb_readRec()
+// Read a record from the database
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_readRec() {
+    console.log('%c fb_readRec(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const APPDB = getDatabase();
+    const AUTH = getAuth();
+    const REF = ref(APPDB, 'users/' + AUTH.currentUser.uid);
+    get(REF).then((snapshot) => {
+        var fb_data = snapshot.val();
+        if (fb_data != null) {
+            console.log('User record read');
+            console.log(fb_data);
+            document.getElementById("p_fbReadRec").innerHTML = "Record read";
+        } else {
+            console.log('No such user record');
+            document.getElementById("p_fbReadRec").innerHTML = "No such user record";
+        }
     }).catch((error) => {
-        console.log('Error writing user record: ' + error);
+        console.log('Error reading user record: ' + error);
     });
-    document.getElementById("fb_writeRec").innerHTML = "Record written";
 }
 
 /**************************************************************/
