@@ -28,7 +28,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signO
 /**************************************************************/
 export {
     fb_initialise, fb_authenticate, fb_displayLoginState,
-    fb_signOut, fb_writeRec, fb_readRec
+    fb_signOut, fb_writeRec, fb_readRec, fb_readAll
 };
 
 /**************************************************************/
@@ -178,7 +178,7 @@ function fb_readRec() {
     const AUTH = getAuth();
     const REF = ref(APPDB, 'users/' + AUTH.currentUser.uid);
     get(REF).then((snapshot) => {
-        var fb_data = snapshot.val();
+        let fb_data = snapshot.val();
         if (fb_data != null) {
             console.log('User record read');
             console.log(fb_data);
@@ -189,6 +189,33 @@ function fb_readRec() {
         }
     }).catch((error) => {
         console.log('Error reading user record: ' + error);
+    });
+}
+
+/**************************************************************/
+// fb_readAll()
+// Read all records from the database
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_readAll() {
+    console.log('%c fb_readAll(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const APPDB  = getDatabase();
+    const REF = ref(APPDB, 'users');
+    get(REF).then((snapshot) => {
+        let fb_data = snapshot.val();
+        if (fb_data != null) {
+            console.log('All records read');
+            console.log(fb_data);
+            document.getElementById("p_fbReadAll").innerHTML = "Records read";
+        } else {
+            console.log('No records found');
+            document.getElementById("p_fbReadAll").innerHTML = "No records found";
+        }
+    }).catch((error) => {
+        console.log('Error reading user records: ' + error);
     });
 }
 
