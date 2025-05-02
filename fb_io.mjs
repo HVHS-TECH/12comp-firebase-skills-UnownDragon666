@@ -19,8 +19,9 @@ import { initializeApp }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getDatabase }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup }
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
 
 /**************************************************************/
 // This is the configuration for my firebase app
@@ -51,7 +52,8 @@ console.info('%c FIREBASEAPPDB: ' + FB_APPDB,
 /**************************************************************/
 export {
     fb_initialise,
-    fb_authenticate
+    fb_authenticate,
+    fb_displayLoginState
 };
 
 /**************************************************************/
@@ -82,14 +84,29 @@ function fb_authenticate() {
         prompt: 'select_account'
     });
 
+    // Sign in with a popup window
+    // This will open a new window for the user to sign in with their google account
     signInWithPopup(FB_AUTH, FB_PROVIDER).then((result) => {
         document.getElementById("p_fbAuthenticate").innerHTML = "Authenticated";
         console.log(result.user.email);
+        console.log(result.user.uid);
     }).catch((error) => {
         console.log('error to authenticate: ' + error);
     });
 }
 
+function fb_displayLoginState() {
+    const FB_AUTH = getAuth();
+    onAuthStateChanged(FB_AUTH, (user) => {
+        if (user) {
+            console.log('User is signed in: ' + user.email);
+            document.getElementById("p_fbLogin").innerHTML = "Logged in as " + user.email;
+        } else {
+            console.log('User is signed out');
+            document.getElementById("p_fbLogin").innerHTML = "Not logged in";
+        }
+    });
+}
 
 /**************************************************************/
 // END OF CODE
