@@ -19,7 +19,10 @@ import { initializeApp }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getDatabase }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }
+import {
+    getAuth, GoogleAuthProvider, signInWithPopup,
+    onAuthStateChanged, signOut
+}
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 
@@ -51,9 +54,8 @@ console.info('%c FIREBASEAPPDB: ' + FB_APPDB,
 // List all the functions called by code or html outside of this module
 /**************************************************************/
 export {
-    fb_initialise,
-    fb_authenticate,
-    fb_displayLoginState
+    fb_initialise, fb_authenticate, fb_displayLoginState,
+    fb_signOut
 };
 
 /**************************************************************/
@@ -77,6 +79,8 @@ function fb_initialise() {
 // Output: N/A
 /**************************************************************/
 function fb_authenticate() {
+    console.log('%c fb_authenticate(): ',   
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
     const FB_AUTH = getAuth();
     const FB_PROVIDER = new GoogleAuthProvider();
     // Make google ask user to select account
@@ -95,7 +99,16 @@ function fb_authenticate() {
     });
 }
 
+/**************************************************************/
+// fb_displayLoginState()
+// Display the login state of the user
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
 function fb_displayLoginState() {
+    console.log('%c fb_displayLoginState(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
     const FB_AUTH = getAuth();
     onAuthStateChanged(FB_AUTH, (user) => {
         if (user) {
@@ -105,6 +118,25 @@ function fb_displayLoginState() {
             console.log('User is signed out');
             document.getElementById("p_fbLogin").innerHTML = "Not logged in";
         }
+    });
+}
+
+/**************************************************************/
+// fb_signOut()
+// Sign out the user from firebase
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_signOut() {
+    console.log('%c fb_signOut(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const FB_AUTH = getAuth();
+    signOut(FB_AUTH).then(() => {
+        console.log('User signed out');
+        document.getElementById("p_fbLogin").innerHTML = "Not logged in";
+    }).catch((error) => {
+        console.log('Error signing out: ' + error);
     });
 }
 
