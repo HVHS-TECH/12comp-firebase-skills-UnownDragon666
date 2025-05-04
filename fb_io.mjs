@@ -29,7 +29,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signO
 export {
     fb_initialise, fb_authenticate, fb_displayLoginState,
     fb_signOut, fb_writeRec, fb_readRec,
-    fb_readAll, fb_updateRec
+    fb_readAll, fb_updateRec, fb_sortedRead
 };
 
 /**************************************************************/
@@ -246,7 +246,25 @@ function fb_updateRec(_ref, _data) {
     });
 }
 
-
+/***********************************************************/
+// fb_sortedRead()
+// Read records from the database after sorting
+// Called by button in index.html
+// Input: _sortKey is the key to sort by, _readNum is the number of records to read
+// Output: N/A
+/**************************************************************/
+function fb_sortedRead(_sortKey, _readNum) {
+    console.log('%c fb_sortedRead(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const APPDB = getDatabase();
+    const REF = query(ref(APPDB, 'users'), orderByChild(_sortKey), limitToFirst(_readNum));
+    get(REF).then((snapshot) => {
+        console.log(snapshot.val());
+        document.getElementById("p_fbReadSorted").innerHTML = `First ${_readNum} records read by ${_sortKey}`;
+    }).catch((error) => {
+        console.log('Error reading records: ' + error);
+    });
+}
 
 /**************************************************************/
 // END OF CODE
