@@ -17,7 +17,7 @@ console.log('%c fb_io.mjs',
 // Import all the methods you want to call from the firebase modules
 import { initializeApp }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getDatabase, ref, set, get, update, query, orderByChild, limitToFirst, onValue }
+import { getDatabase, ref, set, get, update, query, orderByChild, limitToFirst, onValue, remove}
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -30,7 +30,7 @@ export {
     fb_initialise, fb_authenticate, fb_displayLoginState,
     fb_signOut, fb_writeRec, fb_readRec,
     fb_readAll, fb_updateRec, fb_sortedRead,
-    fb_listenForUpdates, fb_randNumSet
+    fb_listenForUpdates, fb_randNumSet, fb_deleteRec
 };
 
 /**************************************************************/
@@ -341,12 +341,39 @@ function fb_listenForUpdates() {
     });
 }
 
+/**************************************************************/
+// fb_randNumSet()
+// Set a random number in the database
+// Called by setInterval() in main.mjs to test fb_listenForUpdates()
+// Input: N/A
+// Output: N/A
+/**************************************************************/
 function fb_randNumSet() {
     console.log('%c f_randNumSet(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
     const APPDB = getDatabase();
     const REF = ref(APPDB, 'rand/');
     set(REF, { randNum: Math.random() });
+}
+
+/**************************************************************/
+// fb_deleteRec()
+// Delete randNum record in the database
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_deleteRec() {
+    console.log('%c f_removeRec(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const APPDB = getDatabase();
+    const REF = ref(APPDB, 'rand/randNum');
+    remove(REF).then(() => {
+        console.log('Successfully removed the record');
+        document.getElementById("p_fbDeleteRec").innerHTML = 'Record removed';
+    }).catch((error) => {
+        console.log('Error removing the record: ' + error);
+    });
 }
 
 /**************************************************************/
