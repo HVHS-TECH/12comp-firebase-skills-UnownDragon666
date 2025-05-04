@@ -17,7 +17,7 @@ console.log('%c fb_io.mjs',
 // Import all the methods you want to call from the firebase modules
 import { initializeApp }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getDatabase, ref, set, get }
+import { getDatabase, ref, set, get, update, query, orderByChild, limitToFirst }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -28,7 +28,8 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signO
 /**************************************************************/
 export {
     fb_initialise, fb_authenticate, fb_displayLoginState,
-    fb_signOut, fb_writeRec, fb_readRec, fb_readAll
+    fb_signOut, fb_writeRec, fb_readRec,
+    fb_readAll, fb_updateRec
 };
 
 /**************************************************************/
@@ -41,7 +42,7 @@ export {
 function fb_initialise() {
     console.log('%c fb_initialise(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
-    
+
     const FB_CONFIG = {
         apiKey: "AIzaSyCkKH0pJ-Fo9axQNsBswxIwZyuruG1X6ts",
         authDomain: "comp-2025-idrees-munshi-24d0e.firebaseapp.com",
@@ -60,7 +61,7 @@ function fb_initialise() {
     const FB_APPDB = getDatabase(FB_APP);
     console.info('%c FIREBASEAPPDB: ' + FB_APPDB,
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
-    
+
     document.getElementById("p_fbInitialise").innerHTML = "Initialised";
 }
 
@@ -161,7 +162,7 @@ function fb_writeRec() {
         }).catch((error) => {
             console.log('Error writing user record: ' + error);
         });
-    
+
 }
 
 /**************************************************************/
@@ -202,7 +203,7 @@ function fb_readRec() {
 function fb_readAll() {
     console.log('%c fb_readAll(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
-    const APPDB  = getDatabase();
+    const APPDB = getDatabase();
     const REF = ref(APPDB, 'users');
     get(REF).then((snapshot) => {
         let fb_data = snapshot.val();
@@ -218,6 +219,34 @@ function fb_readAll() {
         console.log('Error reading user records: ' + error);
     });
 }
+
+/***********************************************************/
+// fb_updateRec()
+// Update a record in the database
+// Called by button in index.html
+// Input: _ref is the reference to the record to be updated
+// Output: N/A
+/**************************************************************/
+function fb_updateRec(_ref, _data) {
+    console.log('%c fb_updateRec(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const APPDB = getDatabase();
+    const AUTH = getAuth();
+    const REF = ref(APPDB, _ref + '/' + AUTH.currentUser.uid);
+    update(REF, _data).then(() => {
+        console.log('Record updated');
+        document.getElementById("p_fbUpdateRec").innerHTML = "Record updated";
+        get(REF).then((snapshot) => {
+            console.log(snapshot.val());
+        }).catch((error) => {
+            console.log('Error reading record: ' + error);
+        })
+    }).catch((error) => {
+        console.log('Error updating record: ' + error);
+    });
+}
+
+
 
 /**************************************************************/
 // END OF CODE
