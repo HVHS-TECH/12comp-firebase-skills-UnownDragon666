@@ -17,7 +17,7 @@ console.log('%c fb_io.mjs',
 // Import all the methods you want to call from the firebase modules
 import { initializeApp }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getDatabase, ref, set, get, update, query, orderByChild, limitToFirst }
+import { getDatabase, ref, set, get, update, query, orderByChild, limitToFirst, onValue }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -29,7 +29,8 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signO
 export {
     fb_initialise, fb_authenticate, fb_displayLoginState,
     fb_signOut, fb_writeRec, fb_readRec,
-    fb_readAll, fb_updateRec, fb_sortedRead
+    fb_readAll, fb_updateRec, fb_sortedRead,
+    fb_listenForUpdates, fb_randNumSet
 };
 
 /**************************************************************/
@@ -151,7 +152,7 @@ function fb_writeRec() {
         document.getElementById("p_fbWriteRec").style.color = 'red';
         return;
     }
-    
+
     const APPDB = getDatabase();
     const REF = ref(APPDB, 'users/' + AUTH.currentUser.uid);
     set(REF,
@@ -228,7 +229,7 @@ function fb_readAll() {
         document.getElementById("p_fbReadAll").style.color = 'red';
         return;
     }
-    
+
     const APPDB = getDatabase();
     const REF = ref(APPDB, 'users');
     get(REF).then((snapshot) => {
@@ -308,6 +309,44 @@ function fb_sortedRead(_sortKey, _readNum) {
     }).catch((error) => {
         console.log('Error reading records: ' + error);
     });
+}
+
+/**************************************************************/
+// fb_listenForUpdates()
+// Listen for updates to a record
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_listenForUpdates() {
+    console.log('%c fb_listenForUpdates(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const AUTH = getAuth();
+    if (AUTH.currentUser === null) {
+        console.log('No user logged in');
+        document.getElementById("p_fbListen").innerHTML = "Guest doesn't have permission to read";
+        document.getElementById("p_fbListen").style.color = 'red';
+        return;
+    }
+
+    const APPDB = getDatabase();
+    const REF = ref(APPDB, 'rand');
+    onValue(REF, (snapshot) => {
+        var fb_data = snapshot.val();
+        console.log(fb_data);
+        document.getElementById("p_fbListen").innerHTML = `Latest value is ${fb_data.randNum}`;
+        document.getElementById("p_fbListen").style.color = 'black';
+    }, (error) => {
+        console.log('Error reading records: ' + error);
+    });
+}
+
+function fb_randNumSet() {
+    console.log('%c f_randNumSet(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const APPDB = getDatabase();
+    const REF = ref(APPDB, 'rand/');
+    set(REF, { randNum: Math.random() });
 }
 
 /**************************************************************/

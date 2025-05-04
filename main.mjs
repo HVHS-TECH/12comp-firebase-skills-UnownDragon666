@@ -15,7 +15,8 @@ console.log('%c main.mjs',
 import {
     fb_initialise, fb_authenticate, fb_displayLoginState,
     fb_signOut, fb_writeRec, fb_readRec, 
-    fb_readAll, fb_updateRec, fb_sortedRead
+    fb_readAll, fb_updateRec, fb_sortedRead,
+    fb_listenForUpdates, fb_randNumSet
 }
     from './fb_io.mjs';
 
@@ -30,6 +31,13 @@ window.fb_readRec = fb_readRec;
 window.fb_readAll = fb_readAll;
 window.fb_updateRec = fb_updateRec;
 window.fb_sortedRead = fb_sortedRead;
+window.fb_listenForUpdates = fb_listenForUpdates;
+window.fb_randNumSet = fb_randNumSet;
+
+setInterval(() => {
+    console.log('RAND NUM SET');
+    fb_randNumSet();
+}, 3000);
 
 
 /**************************************************************/
