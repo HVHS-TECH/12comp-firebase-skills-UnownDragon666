@@ -117,7 +117,7 @@ function fb_displayLoginState() {
 
 /**************************************************************/
 // fb_signOut()
-// Sign out the user from firebase
+// Sign out the user from website
 // Called by button in index.html
 // Input: N/A
 // Output: N/A
@@ -136,7 +136,7 @@ function fb_signOut() {
 
 /**************************************************************/
 // fb_writeRec()
-// Write a record to the database
+// Write the user record to the database
 // Called by button in index.html
 // Input: N/A
 // Output: N/A
@@ -145,6 +145,13 @@ function fb_writeRec() {
     console.log('%c fb_writeRec(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
     const AUTH = getAuth();
+    if (AUTH.currentUser === null) {
+        console.log('No user signed in');
+        document.getElementById("p_fbWriteRec").innerHTML = "Guest doesn't have permission to write";
+        document.getElementById("p_fbWriteRec").style.color = 'red';
+        return;
+    }
+    
     const APPDB = getDatabase();
     const REF = ref(APPDB, 'users/' + AUTH.currentUser.uid);
     set(REF,
@@ -159,6 +166,7 @@ function fb_writeRec() {
         }).then(() => {
             console.log('User record written');
             document.getElementById("p_fbWriteRec").innerHTML = "Record written";
+            document.getElementById("p_fbWriteRec").style.color = 'black';
         }).catch((error) => {
             console.log('Error writing user record: ' + error);
         });
@@ -175,8 +183,15 @@ function fb_writeRec() {
 function fb_readRec() {
     console.log('%c fb_readRec(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
-    const APPDB = getDatabase();
     const AUTH = getAuth();
+    if (AUTH.currentUser === null) {
+        console.log('No user logged in');
+        document.getElementById("p_fbReadRec").innerHTML = "Guest doesn't have permission to read";
+        document.getElementById("p_fbReadRec").style.color = 'red';
+        return;
+    }
+
+    const APPDB = getDatabase();
     const REF = ref(APPDB, 'users/' + AUTH.currentUser.uid);
     get(REF).then((snapshot) => {
         let fb_data = snapshot.val();
@@ -184,6 +199,7 @@ function fb_readRec() {
             console.log('User record read');
             console.log(fb_data);
             document.getElementById("p_fbReadRec").innerHTML = "Record read";
+            document.getElementById("p_fbReadRec").style.color = 'black';
         } else {
             console.log('No such user record');
             document.getElementById("p_fbReadRec").innerHTML = "No such user record";
@@ -191,6 +207,8 @@ function fb_readRec() {
     }).catch((error) => {
         console.log('Error reading user record: ' + error);
     });
+
+
 }
 
 /**************************************************************/
@@ -203,6 +221,14 @@ function fb_readRec() {
 function fb_readAll() {
     console.log('%c fb_readAll(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const AUTH = getAuth();
+    if (AUTH.currentUser === null) {
+        console.log('No user logged in');
+        document.getElementById("p_fbReadAll").innerHTML = "Guest doesn't have permission to read";
+        document.getElementById("p_fbReadAll").style.color = 'red';
+        return;
+    }
+    
     const APPDB = getDatabase();
     const REF = ref(APPDB, 'users');
     get(REF).then((snapshot) => {
@@ -211,6 +237,7 @@ function fb_readAll() {
             console.log('All records read');
             console.log(fb_data);
             document.getElementById("p_fbReadAll").innerHTML = "Records read";
+            document.getElementById("p_fbReadAll").style.color = 'black';
         } else {
             console.log('No records found');
             document.getElementById("p_fbReadAll").innerHTML = "No records found";
@@ -230,12 +257,20 @@ function fb_readAll() {
 function fb_updateRec(_ref, _data) {
     console.log('%c fb_updateRec(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
-    const APPDB = getDatabase();
     const AUTH = getAuth();
+    if (AUTH.currentUser === null) {
+        console.log('No user logged in');
+        document.getElementById("p_fbUpdateRec").innerHTML = "Guest doesn't have permission to write";
+        document.getElementById("p_fbUpdateRec").style.color = 'red';
+        return;
+    }
+
+    const APPDB = getDatabase();
     const REF = ref(APPDB, _ref + '/' + AUTH.currentUser.uid);
     update(REF, _data).then(() => {
         console.log('Record updated');
         document.getElementById("p_fbUpdateRec").innerHTML = "Record updated";
+        document.getElementById("p_fbUpdateRec").style.color = 'black';
         get(REF).then((snapshot) => {
             console.log(snapshot.val());
         }).catch((error) => {
@@ -256,11 +291,20 @@ function fb_updateRec(_ref, _data) {
 function fb_sortedRead(_sortKey, _readNum) {
     console.log('%c fb_sortedRead(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const AUTH = getAuth();
+    if (AUTH.currentUser === null) {
+        console.log('No user logged in');
+        document.getElementById("p_fbReadSorted").innerHTML = "Guest doesn't have permission to read";
+        document.getElementById("p_fbReadSorted").style.color = 'red';
+        return;
+    }
+
     const APPDB = getDatabase();
     const REF = query(ref(APPDB, 'users'), orderByChild(_sortKey), limitToFirst(_readNum));
     get(REF).then((snapshot) => {
         console.log(snapshot.val());
         document.getElementById("p_fbReadSorted").innerHTML = `First ${_readNum} records read by ${_sortKey}`;
+        document.getElementById("p_fbReadSorted").style.color = 'black';
     }).catch((error) => {
         console.log('Error reading records: ' + error);
     });
