@@ -21,28 +21,29 @@
 <body>
     <header class="container">
         <h1>12COMP Firebase Realtime Database Skills</h1>
+        <img id="i_pfimg">
     </header>
 
     <section>
         <div class="container">
             <div class="column">
                 <button onclick="fb_initialise()">t03: initialise firebase</button>
-                <button onclick="fb_authenticate()">t04: authenticate</button>
-                <button onclick="fb_displayLoginState()">t05: detect login change</button>
-                <button onclick="fb_signOut()">t06: logout</button>
+                <button onclick="fb_authenticate()" disabled>t04: authenticate</button>
+                <button onclick="fb_displayLoginState()" disabled>t05: detect login change</button>
+                <button onclick="fb_signOut()" disabled>t06: logout</button>
             </div>
 
             <div class="column">
-                <button onclick="fb_writeRec()">t07: write record</button>
-                <button onclick="fb_readRec()">t08: read record</button>
-                <button onclick="fb_readAll()">t09: read all</button>
-                <button onclick="fb_updateRec('/users', {name: 'test', age: 22})">t10: update record</button>
+                <button onclick="fb_writeRec()" disabled>t07: write record</button>
+                <button onclick="fb_readRec()" disabled>t08: read record</button>
+                <button onclick="fb_readAll()" disabled>t09: read all</button>
+                <button onclick="fb_updateRec('/users', {name: 'test', age: 22})" disabled>t10: update record</button>
             </div>
 
             <div class="column">
-                <button onclick="fb_sortedRead('name', 5)">t11: sorted read</button>
-                <button onclick="fb_listenForUpdates()">ext(a): listen for changes</button>
-                <button onclick="fb_deleteRec()">ext(b): delete record</button>
+                <button onclick="fb_sortedRead('name', 5)" disabled>t11: sorted read</button>
+                <button onclick="fb_listenForUpdates()" disabled>ext(a): listen for changes</button>
+                <button onclick="fb_deleteRec()" disabled>ext(b): delete record</button>
                 
             </div>
         </div>

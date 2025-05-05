@@ -64,6 +64,8 @@ function fb_initialise() {
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
 
     document.getElementById("p_fbInitialise").innerHTML = "Initialised";
+
+    // Set buttons to disabled = false;
 }
 
 /**************************************************************/
@@ -109,6 +111,7 @@ function fb_displayLoginState() {
         if (user) {
             console.log('User is signed in: ' + user.email);
             document.getElementById("p_fbLogin").innerHTML = "Logged in as " + user.displayName;
+            document.getElementById("i_pfimg").src = user.photoURL;
         } else {
             console.log('User is signed out');
             document.getElementById("p_fbLogin").innerHTML = "Not logged in";
