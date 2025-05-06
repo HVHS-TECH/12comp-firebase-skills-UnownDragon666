@@ -17,7 +17,7 @@ console.log('%c fb_io.mjs',
 // Import all the methods you want to call from the firebase modules
 import { initializeApp }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getDatabase, ref, set, get, update, query, orderByChild, limitToFirst, onValue, remove}
+import { getDatabase, ref, set, get, update, query, orderByChild, limitToFirst, onValue, remove }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
     from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -30,7 +30,8 @@ export {
     fb_initialise, fb_authenticate, fb_displayLoginState,
     fb_signOut, fb_writeRec, fb_readRec,
     fb_readAll, fb_updateRec, fb_sortedRead,
-    fb_listenForUpdates, fb_randNumSet, fb_deleteRec
+    fb_listenForUpdates, fb_randNumSet, fb_deleteRec,
+    fb_numberUpdateRec, fb_listenForNumberUpdate
 };
 
 /**************************************************************/
@@ -63,9 +64,12 @@ function fb_initialise() {
     console.info('%c FIREBASEAPPDB: ' + FB_APPDB,
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
 
-    document.getElementById("p_fbInitialise").innerHTML = "Initialised";
-
     // Set buttons to disabled = false;
+    for (const button of document.getElementsByClassName("methodButton")) {
+        button.disabled = false;
+    }
+    document.getElementById("b_initialiseButton").disabled = true;
+    document.getElementById("p_fbInitialise").innerHTML = "Initialised";
 }
 
 /**************************************************************/
@@ -377,6 +381,53 @@ function fb_deleteRec() {
     }).catch((error) => {
         console.log('Error removing the record: ' + error);
     });
+}
+
+/**************************************************************/
+// fb_numberUpdateRec()
+// Update a number in the database
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_numberUpdateRec() {
+    console.log('%c fb_numberUpdateRec(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+
+    let dbNum;
+    const DB = getDatabase();
+    const REF = ref(DB, 'numbers');
+    get(REF).then((snapshot) => {
+        dbNum = snapshot.val().number;
+        console.log('Number: ' + dbNum);
+
+        update(REF, { 'numbers': dbNum + 1 }).then(() => {
+            console.log('Number updated');
+        }).catch((error) => {
+            console.log('Error: ' + error);
+        });
+    });
+}
+
+/**************************************************************/
+// fb_listenForNumberUpdate()
+// Listen for number update in the database
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_listenForNumberUpdate() {
+    console.log('%c fb_listenForNumberUpdate(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+
+    const DB = getDatabase();
+    const REF = ref(DB, 'numbers');
+    onValue(REF, (snapshot) => {
+        let data = snapshot.val();
+        document.getElementById("p_numberUpdate").innerHTML = `${data.number}`;
+    }), (error) => {
+        console.log('Error: ' + error);
+    }
 }
 
 /**************************************************************/

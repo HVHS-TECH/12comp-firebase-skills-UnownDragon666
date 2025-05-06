@@ -16,7 +16,8 @@ import {
     fb_initialise, fb_authenticate, fb_displayLoginState,
     fb_signOut, fb_writeRec, fb_readRec, 
     fb_readAll, fb_updateRec, fb_sortedRead,
-    fb_listenForUpdates, fb_randNumSet, fb_deleteRec
+    fb_listenForUpdates, fb_randNumSet, fb_deleteRec, 
+    fb_numberUpdateRec, fb_listenForNumberUpdate
 }
     from './fb_io.mjs';
 
@@ -34,14 +35,16 @@ window.fb_sortedRead = fb_sortedRead;
 window.fb_listenForUpdates = fb_listenForUpdates;
 window.fb_randNumSet = fb_randNumSet;
 window.fb_deleteRec = fb_deleteRec;
+window.fb_numberUpdateRec = fb_numberUpdateRec;
+window.fb_listenForNumberUpdate = fb_listenForNumberUpdate;
 
 setInterval(() => {
     console.log('RAND NUM SET');
     fb_randNumSet();
 }, 3000);
 
-
-
+// Listen for updates to the number
+fb_listenForNumberUpdate();
 
 /**************************************************************/
 // index.html main code

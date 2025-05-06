@@ -27,24 +27,24 @@
     <section>
         <div class="container">
             <div class="column">
-                <button onclick="fb_initialise()">t03: initialise firebase</button>
-                <button onclick="fb_authenticate()" disabled>t04: authenticate</button>
-                <button onclick="fb_displayLoginState()" disabled>t05: detect login change</button>
-                <button onclick="fb_signOut()" disabled>t06: logout</button>
+                <button id="b_initialiseButton" onclick="fb_initialise()">t03: initialise firebase</button>
+                <button class="methodButton" onclick="fb_authenticate()" disabled="true">t04: authenticate</button>
+                <button class="methodButton" onclick="fb_displayLoginState()" disabled>t05: detect login change</button>
+                <button class="methodButton" onclick="fb_signOut()" disabled>t06: logout</button>
             </div>
 
             <div class="column">
-                <button onclick="fb_writeRec()" disabled>t07: write record</button>
-                <button onclick="fb_readRec()" disabled>t08: read record</button>
-                <button onclick="fb_readAll()" disabled>t09: read all</button>
-                <button onclick="fb_updateRec('/users', {name: 'test', age: 22})" disabled>t10: update record</button>
+                <button class="methodButton" onclick="fb_writeRec()" disabled>t07: write record</button>
+                <button class="methodButton" onclick="fb_readRec()" disabled>t08: read record</button>
+                <button class="methodButton" onclick="fb_readAll()" disabled>t09: read all</button>
+                <button class="methodButton" onclick="fb_updateRec('/users', {name: 'test', age: 22})" disabled>t10: update record</button>
             </div>
 
             <div class="column">
-                <button onclick="fb_sortedRead('name', 5)" disabled>t11: sorted read</button>
-                <button onclick="fb_listenForUpdates()" disabled>ext(a): listen for changes</button>
-                <button onclick="fb_deleteRec()" disabled>ext(b): delete record</button>
-                
+                <button class="methodButton" onclick="fb_sortedRead('name', 5)" disabled>t11: sorted read</button>
+                <button class="methodButton" onclick="fb_listenForUpdates()" disabled>ext(a): listen for changes</button>
+                <button class="methodButton" onclick="fb_deleteRec()" disabled>ext(b): delete record</button>
+                <button class="methodButton" onclick="fb_numberUpdateRec()" disabled>Click for make number BIGGER</button>
             </div>
         </div>
     </section>
@@ -72,6 +72,7 @@
                 <p class="p_fbStatus">listen: <span id="p_fbListen"> n/a</span></p>
                 <p class="p_fbStatus">delete rec: <span id="p_fbDeleteRec"> n/a</span></p>
                 <p class="p_fbStatus">debug: <span id="p_debug"> n/a</span></p>
+                <p class="p_fbStatus">number update: <span id="p_numberUpdate"> n/a</span></p>
             </div>
         </div>
     </footer>
