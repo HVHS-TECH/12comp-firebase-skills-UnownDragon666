@@ -297,6 +297,8 @@ function fb_updateRec(_ref, _data) {
 // Output: N/A
 /**************************************************************/
 function fb_sortedRead(_sortKey, _readNum) {
+    // _sortKey = 'name';
+    // _readNum = 5;
     console.log('%c fb_sortedRead(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
     const AUTH = getAuth();
@@ -308,7 +310,8 @@ function fb_sortedRead(_sortKey, _readNum) {
     }
 
     const APPDB = getDatabase();
-    const REF = query(ref(APPDB, 'users'), orderByChild(_sortKey), limitToFirst(_readNum));
+    console.log('Sorting by ' + _sortKey);
+    const REF = query(ref(APPDB, 'users'), orderByChild(_sortKey.name), limitToFirst(_readNum));
     get(REF).then((snapshot) => {
         console.log(snapshot.val());
         document.getElementById("p_fbReadSorted").innerHTML = `First ${_readNum} records read by ${_sortKey}`;
