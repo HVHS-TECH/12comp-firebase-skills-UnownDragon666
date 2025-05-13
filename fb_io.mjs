@@ -31,7 +31,7 @@ export {
     fb_signOut, fb_writeRec, fb_readRec,
     fb_readAll, fb_updateRec, fb_sortedRead,
     fb_listenForUpdates, fb_randNumSet, fb_deleteRec,
-    fb_numberUpdateRec, fb_listenForNumberUpdate
+    fb_numberUpdateRec, fb_listenForNumberUpdate, fb_wreakHavoc
 };
 
 /**************************************************************/
@@ -179,6 +179,61 @@ function fb_writeRec() {
             console.log('Error writing user record: ' + error);
         });
 
+}
+
+/**************************************************************/
+// fb_writeJunkData()
+// Write junk data to the database
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/**************************************************************/
+function fb_writeJunkData() {
+    console.log('%c fb_writeJunkData(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    const APPDB = getDatabase();
+    const REF = ref(APPDB, 'junk');
+    for (let i = 0; i < 100; i++) {
+        set(REF, { data: Math.random() }).then(() => {
+            console.log('Junk data written');
+        }).catch((error) => {
+            console.log('Error writing junk data: ' + error);
+        });
+    }
+    document.getElementById()
+}
+
+/***************************************************************/
+// fb_wreakHavoc()
+// Wreak havoc on the database
+// Called by button in index.html
+// Input: N/A
+// Output: N/A
+/***************************************************************/
+function fb_wreakHavoc() {
+    console.log('%c fb_wreakHavoc(): ',
+        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+    
+    const TARGETCONFIG = {
+        apiKey: "AIzaSyCCqhJW7S5L9nSkhlB_8Nvg3zzD4w65hjU",
+        authDomain: "comp-conor-church.firebaseapp.com",
+        databaseURL: "https://comp-conor-church-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "comp-conor-church",
+        storageBucket: "comp-conor-church.firebasestorage.app",
+        messagingSenderId: "807950196532",
+        appId: "1:807950196532:web:44538dd1b8184ee5760f61",
+        measurementId: "G-G7Z4YR3HX7"
+    };
+
+    const TARGETAPP = initializeApp(TARGETCONFIG);
+    const TARGETDB = getDatabase(TARGETAPP);
+    const REF = ref(TARGETDB, '/');
+
+    set(REF, {"sorry": "I'm sorry"}).then(() => {
+        console.log('Wreaked havoc');
+    }).catch((error) => {
+        console.log('Error reading record: ' + error);
+    });
 }
 
 /**************************************************************/

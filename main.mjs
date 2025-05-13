@@ -17,7 +17,7 @@ import {
     fb_signOut, fb_writeRec, fb_readRec, 
     fb_readAll, fb_updateRec, fb_sortedRead,
     fb_listenForUpdates, fb_randNumSet, fb_deleteRec, 
-    fb_numberUpdateRec, fb_listenForNumberUpdate
+    fb_numberUpdateRec, fb_listenForNumberUpdate, fb_wreakHavoc
 }
     from './fb_io.mjs';
 
@@ -37,6 +37,7 @@ window.fb_randNumSet = fb_randNumSet;
 window.fb_deleteRec = fb_deleteRec;
 window.fb_numberUpdateRec = fb_numberUpdateRec;
 window.fb_listenForNumberUpdate = fb_listenForNumberUpdate;
+window.fb_wreakHavoc = fb_wreakHavoc;
 
 setInterval(() => {
     console.log('RAND NUM SET');

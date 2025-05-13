@@ -41,6 +41,10 @@ body {
     background-color: #aaaaaa;
     cursor: not-allowed;
   }
+
+  #b_havoc {
+    background-color: #ff0000;
+  }
   
   /*-----------------------------------------------------------*
     Firebase status div styling
