@@ -356,6 +356,7 @@ function fb_sortedRead(_sortKey, _readNum) {
     // _readNum = 5;
     console.log('%c fb_sortedRead(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
+
     const AUTH = getAuth();
     if (AUTH.currentUser === null) {
         console.log('No user logged in');
@@ -371,7 +372,6 @@ function fb_sortedRead(_sortKey, _readNum) {
         snapshot.forEach((childSnapshot) => {
             let fb_data = childSnapshot.val();
             console.log(fb_data);
-
         })
         document.getElementById("p_fbReadSorted").innerHTML = "Records read";
         document.getElementById("p_fbReadSorted").style.color = 'black';
