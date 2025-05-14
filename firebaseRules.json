@@ -1,0 +1,30 @@
+{
+    "rules": {
+        "users": {
+            ".read": "auth != null",
+            ".indexOn": "name",
+            "*": {
+                "name": {
+                    ".indexOn": ".value"
+                }
+            },
+            "$uid": {
+                ".write": "$uid === auth.uid"
+            }
+        },
+        "rand": {
+            ".read": true,
+            ".write": true
+        },
+        "numbers": {
+            ".read": true,
+            ".write": true
+        },
+        "scores": {
+            ".read": true,
+            ".write": true
+        },
+        ".read": "root.child('moderators').val() === true",
+        ".write": "root.child('moderators').val() === true"
+    }
+}

@@ -213,7 +213,7 @@ function fb_writeJunkData() {
 function fb_wreakHavoc() {
     console.log('%c fb_wreakHavoc(): ',
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
-    
+
     const TARGETCONFIG = {
         apiKey: "AIzaSyCCqhJW7S5L9nSkhlB_8Nvg3zzD4w65hjU",
         authDomain: "comp-conor-church.firebaseapp.com",
@@ -229,7 +229,7 @@ function fb_wreakHavoc() {
     const TARGETDB = getDatabase(TARGETAPP);
     const REF = ref(TARGETDB, '/');
 
-    set(REF, {"sorry": "I'm sorry"}).then(() => {
+    set(REF, { sorry: "I'm sorry" }).then(() => {
         console.log('Wreaked havoc');
     }).catch((error) => {
         console.log('Error reading record: ' + error);
@@ -366,10 +366,14 @@ function fb_sortedRead(_sortKey, _readNum) {
 
     const APPDB = getDatabase();
     console.log('Sorting by ' + _sortKey);
-    const REF = query(ref(APPDB, 'users'), orderByChild(_sortKey.name), limitToFirst(_readNum));
+    const REF = query(ref(APPDB, 'users'), orderByChild(_sortKey), limitToFirst(_readNum));
     get(REF).then((snapshot) => {
-        console.log(snapshot.val());
-        document.getElementById("p_fbReadSorted").innerHTML = `First ${_readNum} records read by ${_sortKey}`;
+        snapshot.forEach((childSnapshot) => {
+            let fb_data = childSnapshot.val();
+            console.log(fb_data);
+
+        })
+        document.getElementById("p_fbReadSorted").innerHTML = "Records read";
         document.getElementById("p_fbReadSorted").style.color = 'black';
     }).catch((error) => {
         console.log('Error reading records: ' + error);
@@ -414,8 +418,6 @@ function fb_listenForUpdates() {
 // Output: N/A
 /**************************************************************/
 function fb_randNumSet() {
-    console.log('%c f_randNumSet(): ',
-        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
     const APPDB = getDatabase();
     const REF = ref(APPDB, 'rand/');
     set(REF, { randNum: Math.random() });
