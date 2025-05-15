@@ -1,5 +1,9 @@
 {
     "rules": {
+        "admins": {
+            ".read": "auth.uid === root.child('admins').hasChild(auth.uid)",
+            ".write": false
+        },
         "users": {
             ".read": "auth != null",
             ".indexOn": "name",
@@ -9,8 +13,9 @@
                 }
             },
             "$uid": {
-                ".write": "$uid === auth.uid"
-            }
+                ".write": "$uid === auth.uid || auth.uid === root.child('admins').hasChild(auth.uid)"
+            },
+            ".write": false
         },
         "rand": {
             ".read": true,
@@ -24,7 +29,7 @@
             ".read": true,
             ".write": true
         },
-        ".read": "root.child('moderators').val() === true",
-        ".write": "root.child('moderators').val() === true"
+        ".read": "root.child('admins').val() === true",
+        ".write": "root.child('admins').val() === true"
     }
 }
