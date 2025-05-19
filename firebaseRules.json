@@ -1,7 +1,7 @@
 {
     "rules": {
         "admins": {
-            ".read": "auth.uid === root.child('admins').hasChild(auth.uid)",
+            ".read": "true === root.child('admins').hasChild(auth.uid)",
             ".write": false
         },
         "users": {
@@ -13,9 +13,21 @@
                 }
             },
             "$uid": {
-                ".write": "$uid === auth.uid || auth.uid === root.child('admins').hasChild(auth.uid)"
+                ".write": "$uid === auth.uid || true === root.child('admins').hasChild(auth.uid)",
+                "name": {
+                    ".read": true
+                },
+                "email": {
+                    ".read": "auth.uid == $uid"
+                }
             },
             ".write": false
+        },
+        "SalsStrawberrySaloon": {
+          "$uid": {
+            ".read": "true === root.child('admins').hasChild(auth.uid)",
+          ".write": "auth.uid === $uid"
+          }
         },
         "rand": {
             ".read": true,
@@ -29,7 +41,7 @@
             ".read": true,
             ".write": true
         },
-        ".read": "root.child('admins').val() === true",
-        ".write": "root.child('admins').val() === true"
+        ".read": "true === root.child('admins').hasChild(auth.uid)",
+        ".write": "true === root.child('admins').hasChild(auth.uid)"
     }
 }
