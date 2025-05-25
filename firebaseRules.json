@@ -6,12 +6,9 @@
         },
         "users": {
             ".read": "auth != null",
-            ".indexOn": "name",
-            "*": {
-                "name": {
-                    ".indexOn": ".value"
-                }
-            },
+            ".indexOn": [
+                "name"
+            ],
             "$uid": {
                 ".write": "$uid === auth.uid || true === root.child('admins').hasChild(auth.uid)",
                 "name": {
@@ -23,11 +20,22 @@
             },
             ".write": false
         },
-        "SalsStrawberrySaloon": {
-          "$uid": {
-            ".read": "true === root.child('admins').hasChild(auth.uid)",
-          ".write": "auth.uid === $uid"
-          }
+        "salsStrawberrySaloon": {
+            "users": {
+                ".indexOn": [
+                    "favoriteFruit"
+                ],
+                "name": {
+                    ".read": true
+                },
+                "favoriteFruit": {
+                    ".read": true
+                },
+                "$uid": {
+                    ".read": "true === root.child('admins').hasChild(auth.uid) || auth.uid === $uid",
+                    ".write": "auth.uid === $uid"
+                }
+            }
         },
         "rand": {
             ".read": true,
