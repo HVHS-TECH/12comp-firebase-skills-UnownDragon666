@@ -181,28 +181,6 @@ function fb_writeRec() {
 
 }
 
-/**************************************************************/
-// fb_writeJunkData()
-// Write junk data to the database
-// Called by button in index.html
-// Input: N/A
-// Output: N/A
-/**************************************************************/
-function fb_writeJunkData() {
-    console.log('%c fb_writeJunkData(): ',
-        'color: ' + COL_C + '; background-color: ' + COL_B + ';');
-    const APPDB = getDatabase();
-    const REF = ref(APPDB, 'junk');
-    for (let i = 0; i < 100; i++) {
-        set(REF, { data: Math.random() }).then(() => {
-            console.log('Junk data written');
-        }).catch((error) => {
-            console.log('Error writing junk data: ' + error);
-        });
-    }
-    document.getElementById()
-}
-
 /***************************************************************/
 // fb_wreakHavoc()
 // Wreak havoc on the database
